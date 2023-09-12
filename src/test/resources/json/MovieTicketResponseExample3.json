@@ -1,0 +1,21 @@
+{
+  "transactionId" : 1,
+  "tickets" : [ {
+    "ticketType" : "Adult",
+    "quantity" : 1,
+    "totalCost" : 25.0
+  }, {
+    "ticketType" : "Children",
+    "quantity" : 1,
+    "totalCost" : 5.0
+  }, {
+    "ticketType" : "Senior",
+    "quantity" : 1,
+    "totalCost" : 17.5
+  }, {
+    "ticketType" : "Teen",
+    "quantity" : 1,
+    "totalCost" : 12.0
+  } ],
+  "totalCost" : 59.5
+}
