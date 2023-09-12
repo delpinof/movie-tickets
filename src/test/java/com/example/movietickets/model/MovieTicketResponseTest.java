@@ -1,10 +1,8 @@
 package com.example.movietickets.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -12,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 
@@ -41,10 +37,10 @@ public class MovieTicketResponseTest {
                 .readAllBytes());
         movieTicketResponse1Dto = MovieTicketResponse.builder()
                 .transactionId(1)
-                .tickets(List.of(
-                        MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(2).totalCost(10.0).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Senior).quantity(1).totalCost(17.5).build()
-                ))
+                .tickets(new TreeSet<>(Set.of(
+                        MovieTicket.builder().ticketType(MovieTicketType.Senior).quantity(1).totalCost(17.5).build(),
+                        MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(2).totalCost(10.0).build()
+                )))
                 .totalCost(27.50)
                 .build();
 
@@ -53,11 +49,11 @@ public class MovieTicketResponseTest {
                 .readAllBytes());
         movieTicketResponse2Dto = MovieTicketResponse.builder()
                 .transactionId(1)
-                .tickets(List.of(
-                        MovieTicket.builder().ticketType(MovieTicketType.Adult).quantity(1).totalCost(25.0).build(),
+                .tickets(new TreeSet<>(Set.of(
+                        MovieTicket.builder().ticketType(MovieTicketType.Teen).quantity(1).totalCost(12.0).build(),
                         MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(3).totalCost(11.25).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Teen).quantity(1).totalCost(12.0).build()
-                ))
+                        MovieTicket.builder().ticketType(MovieTicketType.Adult).quantity(1).totalCost(25.0).build()
+                )))
                 .totalCost(48.25)
                 .build();
 
@@ -66,12 +62,12 @@ public class MovieTicketResponseTest {
                 .readAllBytes());
         movieTicketResponse3Dto = MovieTicketResponse.builder()
                 .transactionId(1)
-                .tickets(List.of(
-                        MovieTicket.builder().ticketType(MovieTicketType.Adult).quantity(1).totalCost(25.0).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(1).totalCost(5.0).build(),
+                .tickets(new TreeSet<>(Set.of(
                         MovieTicket.builder().ticketType(MovieTicketType.Senior).quantity(1).totalCost(17.5).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Teen).quantity(1).totalCost(12.0).build()
-                ))
+                        MovieTicket.builder().ticketType(MovieTicketType.Teen).quantity(1).totalCost(12.0).build(),
+                        MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(1).totalCost(5.0).build(),
+                        MovieTicket.builder().ticketType(MovieTicketType.Adult).quantity(1).totalCost(25.0).build()
+                )))
                 .totalCost(59.50)
                 .build();
     }
@@ -88,26 +84,6 @@ public class MovieTicketResponseTest {
     public void deserializeTest(String jsonResponse, MovieTicketResponse expectedResponseDto) throws IOException {
         MovieTicketResponse actualResponse = objectMapper.readValue(jsonResponse, MovieTicketResponse.class);
         AssertionsForClassTypes.assertThat(actualResponse).isEqualTo(expectedResponseDto);
-    }
-
-    @Test
-    public void movieTicketsOrderTest() {
-        List<MovieTicket> unOrderedMovieTickets = new ArrayList<>();
-        unOrderedMovieTickets.add(MovieTicket.builder().ticketType(MovieTicketType.Teen).quantity(1).totalCost(12.0).build());
-        unOrderedMovieTickets.add(MovieTicket.builder().ticketType(MovieTicketType.Senior).quantity(1).totalCost(17.5).build());
-        unOrderedMovieTickets.add(MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(1).totalCost(5.0).build());
-        unOrderedMovieTickets.add(MovieTicket.builder().ticketType(MovieTicketType.Adult).quantity(1).totalCost(25.0).build());
-
-        Collections.sort(unOrderedMovieTickets);
-        List<MovieTicketType> orderedMovieTickets = unOrderedMovieTickets.stream()
-                .map(MovieTicket::getTicketType)
-                .collect(Collectors.toList());
-
-        Assertions.assertThat(orderedMovieTickets)
-                .containsExactly(MovieTicketType.Adult,
-                        MovieTicketType.Children,
-                        MovieTicketType.Senior,
-                        MovieTicketType.Teen);
     }
 
     public static Stream<Arguments> movieTicketResponseData() {

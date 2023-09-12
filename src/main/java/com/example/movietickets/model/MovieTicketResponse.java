@@ -1,15 +1,16 @@
 package com.example.movietickets.model;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-import java.util.List;
+import java.util.TreeSet;
 
-@Data
+@Getter
+@EqualsAndHashCode
 @Builder
 public class MovieTicketResponse {
     private int transactionId;
-    private List<MovieTicket> tickets;
-
+    private TreeSet<MovieTicket> tickets; //Forcing TreeSet implementation for alphabetical order and avoid duplicates.
     private double totalCost;
 }

@@ -1,11 +1,13 @@
 package com.example.movietickets.model;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.List;
 
-@Data
+@Getter
+@EqualsAndHashCode
 @Builder
 public class MovieTicketRequest {
     private int transactionId;
