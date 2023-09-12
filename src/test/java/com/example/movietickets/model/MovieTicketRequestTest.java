@@ -1,6 +1,5 @@
 package com.example.movietickets.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,20 +21,22 @@ public class MovieTicketRequestTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static InputStream movieTicketRequestExample1Stream;
-    private static InputStream movieTicketRequestExample2Stream;
-    private static InputStream movieTicketRequestExample3Stream;
+    private static String movieTicketRequestJson1;
+    private static String movieTicketRequestJson2;
+    private static String movieTicketRequestJson3;
 
-    private static MovieTicketRequest movieTicketRequest1Dto;
-    private static MovieTicketRequest movieTicketRequest2Dto;
-    private static MovieTicketRequest movieTicketRequest3Dto;
+    private static MovieTicketRequest movieTicketRequestDto1;
+    private static MovieTicketRequest movieTicketRequestDto2;
+    private static MovieTicketRequest movieTicketRequestDto3;
 
 
     @BeforeAll
-    public static void setUp() {
+    public static void setUp() throws IOException {
 
-        movieTicketRequestExample1Stream = MovieTicketRequestTest.class.getResourceAsStream("/json/MovieTicketRequestExample1.json");
-        movieTicketRequest1Dto = MovieTicketRequest.builder()
+        movieTicketRequestJson1 = new String(MovieTicketRequestTest.class
+                .getResourceAsStream("/json/MovieTicketRequestExample1.json")
+                .readAllBytes());
+        movieTicketRequestDto1 = MovieTicketRequest.builder()
                 .transactionId(1)
                 .customers(List.of(
                         MovieCustomer.builder().name("John Smith").age(70).build(),
@@ -44,9 +44,10 @@ public class MovieTicketRequestTest {
                         MovieCustomer.builder().name("Bob Doe").age(6).build()))
                 .build();
 
-
-        movieTicketRequestExample2Stream = MovieTicketRequestTest.class.getResourceAsStream("/json/MovieTicketRequestExample2.json");
-        movieTicketRequest2Dto = MovieTicketRequest.builder()
+        movieTicketRequestJson2 = new String(MovieTicketRequestTest.class
+                .getResourceAsStream("/json/MovieTicketRequestExample2.json")
+                .readAllBytes());
+        movieTicketRequestDto2 = MovieTicketRequest.builder()
                 .transactionId(2)
                 .customers(List.of(
                         MovieCustomer.builder().name("Billy Kidd").age(36).build(),
@@ -56,8 +57,10 @@ public class MovieTicketRequestTest {
                         MovieCustomer.builder().name("Joe Smith").age(17).build()))
                 .build();
 
-        movieTicketRequestExample3Stream = MovieTicketRequestTest.class.getResourceAsStream("/json/MovieTicketRequestExample3.json");
-        movieTicketRequest3Dto = MovieTicketRequest.builder()
+        movieTicketRequestJson3 = new String(MovieTicketRequestTest.class
+                .getResourceAsStream("/json/MovieTicketRequestExample3.json")
+                .readAllBytes());
+        movieTicketRequestDto3 = MovieTicketRequest.builder()
                 .transactionId(3)
                 .customers(List.of(
                         MovieCustomer.builder().name("Jesse James").age(36).build(),
@@ -68,26 +71,24 @@ public class MovieTicketRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("serDeTestData")
-    void serializeTest(InputStream expectedJsonRequest, MovieTicketRequest movieTicketRequest) throws IOException {
-        String actualJsonRequest = objectMapper.writeValueAsString(movieTicketRequest);
-        JsonNode actualTree = objectMapper.readTree(actualJsonRequest);
-        JsonNode expectedTree = objectMapper.readTree(expectedJsonRequest);
-        assertThat(actualTree).isEqualTo(expectedTree);
+    @MethodSource("movieTicketRequestData")
+    public void serializeTest(String expectedJsonRequest, MovieTicketRequest movieTicketRequestDto) throws IOException {
+        String actualSerializedRequest = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(movieTicketRequestDto);
+        assertThat(actualSerializedRequest).isEqualTo(expectedJsonRequest);
     }
 
     @ParameterizedTest
-    @MethodSource("serDeTestData")
-    void deserializeTest(InputStream jsonRequest, MovieTicketRequest expectedRequest) throws IOException {
+    @MethodSource("movieTicketRequestData")
+    public void deserializeTest(String jsonRequest, MovieTicketRequest expectedRequestDto) throws IOException {
         MovieTicketRequest actualRequest = objectMapper.readValue(jsonRequest, MovieTicketRequest.class);
-        assertThat(actualRequest).isEqualTo(expectedRequest);
+        assertThat(actualRequest).isEqualTo(expectedRequestDto);
     }
 
-    static Stream<Arguments> serDeTestData() {
+    public static Stream<Arguments> movieTicketRequestData() {
         return Stream.of(
-                Arguments.of(movieTicketRequestExample1Stream, movieTicketRequest1Dto),
-                Arguments.of(movieTicketRequestExample2Stream, movieTicketRequest2Dto),
-                Arguments.of(movieTicketRequestExample3Stream, movieTicketRequest3Dto)
+                Arguments.of(movieTicketRequestJson1, movieTicketRequestDto1),
+                Arguments.of(movieTicketRequestJson2, movieTicketRequestDto2),
+                Arguments.of(movieTicketRequestJson3, movieTicketRequestDto3)
         );
     }
 }
