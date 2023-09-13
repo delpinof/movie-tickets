@@ -1,3 +1,20 @@
-movie-ticket-prices:
-  name: Adult
-  price: 25.0
+movie-tickets:
+  prices:
+    - name: Adult
+      price: 25.0
+      age: 18
+    - name: Senior
+      price: 25.0
+      age: 65
+      discount:
+        discountFor: 1
+        discountAmount: .30
+    - name: Teen
+      price: 12.0
+      age: 11
+    - name: Children
+      price: 5.0
+      age: 0
+      discount:
+        discountFor: 3
+        discountAmount: .25
