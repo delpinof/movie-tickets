@@ -1,18 +1,17 @@
 package com.example.movietickets.service.config;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
 import java.util.TreeSet;
 
 @Component
 @ConfigurationProperties("movie-tickets")
 @Getter
-@Setter
+@Builder
 public class MovieTicketPricesConfiguration {
 
-    private Set<MovieTicketType> prices = new TreeSet<>();
+    private final TreeSet<MovieTicketType> prices;
 }

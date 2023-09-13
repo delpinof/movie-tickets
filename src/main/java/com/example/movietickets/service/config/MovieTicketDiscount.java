@@ -1,9 +1,9 @@
 package com.example.movietickets.service.config;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class MovieTicketDiscount {
     private int discountFor;

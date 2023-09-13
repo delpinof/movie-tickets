@@ -1,8 +1,8 @@
 package com.example.movietickets.service;
 
 import com.example.movietickets.service.config.MovieTicketDiscount;
-import com.example.movietickets.service.config.MovieTicketType;
 import com.example.movietickets.service.config.MovieTicketPricesConfiguration;
+import com.example.movietickets.service.config.MovieTicketType;
 import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.example.movietickets.service.model.QuantityCost;
@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +23,9 @@ class MovieTicketServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MovieTicketPricesConfiguration configuration = new MovieTicketPricesConfiguration();
+        MovieTicketPricesConfiguration configuration = MovieTicketPricesConfiguration.builder()
+                .prices(new TreeSet<>())
+                .build();
         configuration.getPrices().add(MovieTicketType.builder()
                 .name("Adult")
                 .age(18)
@@ -66,19 +69,19 @@ class MovieTicketServiceTest {
     public static Stream<Arguments> testProcess() {
 
         MovieTicketTypePriceDto childrenAndSenior = new MovieTicketTypePriceDto();
-        childrenAndSenior.getTickets().put("Children",new QuantityCost(2,10));
-        childrenAndSenior.getTickets().put("Senior",new QuantityCost(1,17.50));
+        childrenAndSenior.getTickets().put("Children", new QuantityCost(2, 10));
+        childrenAndSenior.getTickets().put("Senior", new QuantityCost(1, 17.50));
 
         MovieTicketTypePriceDto threeChildren = new MovieTicketTypePriceDto();
-        threeChildren.getTickets().put("Adult", new QuantityCost(1,25.0));
-        threeChildren.getTickets().put("Children", new QuantityCost(3,11.25));
-        threeChildren.getTickets().put("Teen", new QuantityCost(1,12.0));
+        threeChildren.getTickets().put("Adult", new QuantityCost(1, 25.0));
+        threeChildren.getTickets().put("Children", new QuantityCost(3, 11.25));
+        threeChildren.getTickets().put("Teen", new QuantityCost(1, 12.0));
 
         MovieTicketTypePriceDto all = new MovieTicketTypePriceDto();
-        all.getTickets().put("Adult", new QuantityCost(1,25.0));
-        all.getTickets().put("Children", new QuantityCost(1,5));
-        all.getTickets().put("Teen", new QuantityCost(1,12.0));
-        all.getTickets().put("Senior", new QuantityCost(1,17.50));
+        all.getTickets().put("Adult", new QuantityCost(1, 25.0));
+        all.getTickets().put("Children", new QuantityCost(1, 5));
+        all.getTickets().put("Teen", new QuantityCost(1, 12.0));
+        all.getTickets().put("Senior", new QuantityCost(1, 17.50));
 
         return Stream.of(
                 Arguments.of(List.of(70, 5, 6), childrenAndSenior),
