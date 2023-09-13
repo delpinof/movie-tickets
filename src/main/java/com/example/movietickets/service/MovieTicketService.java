@@ -42,10 +42,7 @@ public class MovieTicketService implements MovieTicketProcessor {
     private QuantityCost addTicketCost(Map<String, QuantityCost> tickets, MovieTicketType movieTicketType) {
         QuantityCost quantityCost = tickets.get(movieTicketType.getName());
         if (Objects.isNull(quantityCost)) {
-            quantityCost = QuantityCost.builder()
-                    .quantity(1)
-                    .totalCost(movieTicketType.getPrice())
-                    .build();
+            quantityCost = new QuantityCost(1, movieTicketType.getPrice());
             tickets.put(movieTicketType.getName(), quantityCost);
         } else {
             quantityCost.setQuantity(quantityCost.getQuantity() + 1);

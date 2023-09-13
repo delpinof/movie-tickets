@@ -66,19 +66,19 @@ class MovieTicketServiceTest {
     public static Stream<Arguments> testProcess() {
 
         MovieTicketTypePriceDto childrenAndSenior = new MovieTicketTypePriceDto();
-        childrenAndSenior.getTickets().put("Children",QuantityCost.builder().quantity(2).totalCost(10).build());
-        childrenAndSenior.getTickets().put("Senior",QuantityCost.builder().quantity(1).totalCost(17.50).build());
+        childrenAndSenior.getTickets().put("Children",new QuantityCost(2,10));
+        childrenAndSenior.getTickets().put("Senior",new QuantityCost(1,17.50));
 
         MovieTicketTypePriceDto threeChildren = new MovieTicketTypePriceDto();
-        threeChildren.getTickets().put("Adult", QuantityCost.builder().quantity(1).totalCost(25.0).build());
-        threeChildren.getTickets().put("Children", QuantityCost.builder().quantity(3).totalCost(11.25).build());
-        threeChildren.getTickets().put("Teen", QuantityCost.builder().quantity(1).totalCost(12.0).build());
+        threeChildren.getTickets().put("Adult", new QuantityCost(1,25.0));
+        threeChildren.getTickets().put("Children", new QuantityCost(3,11.25));
+        threeChildren.getTickets().put("Teen", new QuantityCost(1,12.0));
 
         MovieTicketTypePriceDto all = new MovieTicketTypePriceDto();
-        all.getTickets().put("Adult", QuantityCost.builder().quantity(1).totalCost(25.0).build());
-        all.getTickets().put("Children", QuantityCost.builder().quantity(1).totalCost(5).build());
-        all.getTickets().put("Teen", QuantityCost.builder().quantity(1).totalCost(12.0).build());
-        all.getTickets().put("Senior", QuantityCost.builder().quantity(1).totalCost(17.50).build());
+        all.getTickets().put("Adult", new QuantityCost(1,25.0));
+        all.getTickets().put("Children", new QuantityCost(1,5));
+        all.getTickets().put("Teen", new QuantityCost(1,12.0));
+        all.getTickets().put("Senior", new QuantityCost(1,17.50));
 
         return Stream.of(
                 Arguments.of(List.of(70, 5, 6), childrenAndSenior),
