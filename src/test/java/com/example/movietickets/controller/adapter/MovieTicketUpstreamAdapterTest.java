@@ -1,7 +1,7 @@
-package com.example.movietickets.service.adapter;
+package com.example.movietickets.controller.adapter;
 
-import com.example.movietickets.model.MovieTicket;
-import com.example.movietickets.model.MovieTicketResponse;
+import com.example.movietickets.api.model.MovieTicket;
+import com.example.movietickets.api.model.MovieTicketResponse;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.example.movietickets.service.model.QuantityCost;
 import org.junit.jupiter.params.ParameterizedTest;

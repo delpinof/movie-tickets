@@ -1,7 +1,7 @@
 package com.example.movietickets.api;
 
-import com.example.movietickets.model.MovieTicketRequest;
-import com.example.movietickets.model.MovieTicketResponse;
+import com.example.movietickets.api.model.MovieTicketRequest;
+import com.example.movietickets.api.model.MovieTicketResponse;
 
 public interface MovieTicketApi {
 

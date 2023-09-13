@@ -1,7 +1,7 @@
-package com.example.movietickets.service.adapter;
+package com.example.movietickets.controller.adapter;
 
-import com.example.movietickets.model.MovieCustomer;
-import com.example.movietickets.model.MovieTicketRequest;
+import com.example.movietickets.api.model.MovieCustomer;
+import com.example.movietickets.api.model.MovieTicketRequest;
 import com.example.movietickets.service.model.MovieTicketInputDto;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.example.movietickets.model;
+package com.example.movietickets.api.model;
 
 import lombok.Builder;
 import lombok.Data;
