@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,5 +14,5 @@ import java.util.TreeSet;
 @Setter
 public class MovieTicketPricesConfiguration {
 
-    private Set<MovieTicketType> prices = new TreeSet<>(Collections.reverseOrder());
+    private Set<MovieTicketType> prices = new TreeSet<>();
 }

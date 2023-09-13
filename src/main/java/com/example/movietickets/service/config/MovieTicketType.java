@@ -13,6 +13,6 @@ public class MovieTicketType implements Comparable<MovieTicketType> {
 
     @Override
     public int compareTo(MovieTicketType anotherPrice) {
-        return this.getAge().compareTo(anotherPrice.getAge());
+        return anotherPrice.getAge().compareTo(this.getAge());
     }
 }
