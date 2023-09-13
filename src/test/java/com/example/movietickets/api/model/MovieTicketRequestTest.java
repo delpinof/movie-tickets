@@ -1,4 +1,4 @@
-package com.example.movietickets.model;
+package com.example.movietickets.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,4 +1,4 @@
-package com.example.movietickets.model;
+package com.example.movietickets.api.model;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

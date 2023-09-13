@@ -1,9 +1,9 @@
 package com.example.movietickets.controller;
 
 import com.example.movietickets.api.MovieTicketApi;
-import com.example.movietickets.model.MovieCustomer;
-import com.example.movietickets.model.MovieTicketRequest;
-import com.example.movietickets.model.MovieTicketResponse;
+import com.example.movietickets.api.model.MovieCustomer;
+import com.example.movietickets.api.model.MovieTicketRequest;
+import com.example.movietickets.api.model.MovieTicketResponse;
 import com.example.movietickets.service.MovieTicketProcessor;
 import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
