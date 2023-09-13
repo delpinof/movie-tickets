@@ -5,6 +5,7 @@ import com.example.movietickets.model.MovieCustomer;
 import com.example.movietickets.model.MovieTicketRequest;
 import com.example.movietickets.model.MovieTicketResponse;
 import com.example.movietickets.service.MovieTicketProcessor;
+import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -52,7 +53,7 @@ public class MovieTicketControllerTest {
 
         MovieTicketResponse movieTicketServiceResponse = objectMapper.readValue(movieTicketResponse, MovieTicketResponse.class);
 
-        when(movieTicketProcessor.process(any())).thenReturn(movieTicketServiceResponse);
+        when(movieTicketProcessor.process(any())).thenReturn(new MovieTicketTypePriceDto());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(MovieTicketApi.MOVIE_TICKET_TRANSACTION)
                 .content(movieTicketRequest)

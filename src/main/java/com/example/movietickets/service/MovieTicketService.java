@@ -1,76 +1,68 @@
 package com.example.movietickets.service;
 
-import com.example.movietickets.model.MovieCustomer;
-import com.example.movietickets.model.MovieTicket;
-import com.example.movietickets.model.MovieTicketRequest;
-import com.example.movietickets.model.MovieTicketResponse;
-import com.example.movietickets.model.MovieTicketType;
+import com.example.movietickets.service.config.MovieTicketDiscount;
+import com.example.movietickets.service.config.MovieTicketPrice;
+import com.example.movietickets.service.config.MovieTicketPricesConfiguration;
+import com.example.movietickets.service.model.MovieTicketInputDto;
+import com.example.movietickets.service.model.MovieTicketTypePriceDto;
+import com.example.movietickets.service.model.QuantityCost;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
+@RequiredArgsConstructor
 public class MovieTicketService implements MovieTicketProcessor {
+
+    @Autowired
+    private final MovieTicketPricesConfiguration configuration;
+
     @Override
-    public MovieTicketResponse process(MovieTicketRequest request) {
-        TreeSet<MovieTicket> tickets = new TreeSet<>();
-        Map<MovieTicketType, Integer> ticketCount = new HashMap<>();
-        for (MovieCustomer customer : request.getCustomers()) {
-            MovieTicketType movieTicketType = getTicketType(customer.getAge());
-            ticketCount.merge(movieTicketType, 1, Integer::sum);
-        }
+    public MovieTicketTypePriceDto process(MovieTicketInputDto inputDto) {
+        MovieTicketTypePriceDto result = new MovieTicketTypePriceDto();
 
-        double transactionCost = 0.0;
-        for (MovieTicketType movieTicketType : ticketCount.keySet()) {
-            int count = ticketCount.get(movieTicketType);
-            double ticketTypeCost = getTicketPrice(movieTicketType) * count;
-            ticketTypeCost -= ticketTypeCost * getDiscount(movieTicketType, count);
-            tickets.add(MovieTicket.builder()
-                    .ticketType(movieTicketType)
-                    .quantity(count)
-                    .totalCost(ticketTypeCost)
-                    .build());
-            transactionCost += ticketTypeCost;
-        }
+        for (int age : inputDto.getCustomersAge()) {
+            MovieTicketPrice movieTicketPrice = configuration.getPrices()
+                    .stream()
+                    .filter(e -> age >= e.getAge())
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Ticket Type not found for age"));
 
-        return MovieTicketResponse.builder()
-                .transactionId(request.getTransactionId())
-                .tickets(tickets)
-                .totalCost(transactionCost)
-                .build();
+            result.getTickets().merge(movieTicketPrice.getName(),
+                    QuantityCost.builder().quantity(1).totalCost(movieTicketPrice.getPrice()).build(),
+                    (oldV, newV) -> {
+                        newV.setQuantity(oldV.getQuantity() + 1);
+                        newV.setTotalCost(oldV.getTotalCost() + movieTicketPrice.getPrice());
+                        Optional.ofNullable(movieTicketPrice.getDiscount())
+                                .ifPresent(movieTicketDiscount -> {
+                                    if (newV.getQuantity() >= movieTicketDiscount.getDiscountFor()) {
+                                        double discount = newV.getTotalCost() * movieTicketDiscount.getDiscountAmount();
+                                        newV.setTotalCost(newV.getTotalCost() - discount);
+                                    }
+                                });
+                        return newV;
+                    });
+        }
+        return result;
     }
 
-    private double getDiscount(MovieTicketType movieTicketType, int count) {
-        double discount = 0.0;
-        switch (movieTicketType) {
-            case Senior -> discount = .30;
-            case Children -> {
-                if (count >= 3) {
-                    discount = .25;
-                }
+    static class MovieTicketDiscountConsumer implements Consumer<MovieTicketDiscount> {
+
+        private final QuantityCost quantityCost;
+
+        public MovieTicketDiscountConsumer(QuantityCost quantityCost) {
+            this.quantityCost = quantityCost;
+        }
+
+        @Override
+        public void accept(MovieTicketDiscount movieTicketDiscount) {
+            if (quantityCost.getQuantity() >= movieTicketDiscount.getDiscountFor()) {
+                double discount = quantityCost.getTotalCost() * movieTicketDiscount.getDiscountAmount();
+                quantityCost.setTotalCost(quantityCost.getTotalCost() - discount);
             }
         }
-        return discount;
-    }
-
-    public MovieTicketType getTicketType(int age) {
-        if (age >= 65)
-            return MovieTicketType.Senior;
-        if (age >= 18)
-            return MovieTicketType.Adult;
-        if (age >= 11)
-            return MovieTicketType.Teen;
-        else
-            return MovieTicketType.Children;
-    }
-
-    public double getTicketPrice(MovieTicketType ticketType) {
-        return switch (ticketType) {
-            case Adult, Senior -> 25;
-            case Teen -> 12;
-            case Children -> 5;
-        };
     }
 }

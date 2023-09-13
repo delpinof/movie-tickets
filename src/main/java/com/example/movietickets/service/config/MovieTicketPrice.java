@@ -1,8 +1,10 @@
 package com.example.movietickets.service.config;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class MovieTicketPrice implements Comparable<MovieTicketPrice> {
     private String name;
     private double price;
@@ -11,6 +13,6 @@ public class MovieTicketPrice implements Comparable<MovieTicketPrice> {
 
     @Override
     public int compareTo(MovieTicketPrice anotherPrice) {
-        return anotherPrice.getAge().compareTo(this.getAge());
+        return this.getAge().compareTo(anotherPrice.getAge());
     }
 }
