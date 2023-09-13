@@ -37,13 +37,10 @@ public class MovieTicketControllerTest {
     private MovieTicketProcessor movieTicketProcessor;
     @MockBean
     private Function<MovieTicketRequest, MovieTicketInputDto> downstreamAdapter;
-
     @MockBean
     private Function<MovieTicketTypePriceDto, MovieTicketResponse> upstreamAdapter;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private MockMvc mockMvc;
 
