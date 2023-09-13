@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ public class MovieTicketService implements MovieTicketProcessor {
     @Override
     public MovieTicketTypePriceDto process(MovieTicketInputDto inputDto) {
         MovieTicketTypePriceDto result = new MovieTicketTypePriceDto();
-
         for (int age : inputDto.getCustomersAge()) {
             MovieTicketPrice movieTicketPrice = configuration.getPrices()
                     .stream()
@@ -31,38 +29,27 @@ public class MovieTicketService implements MovieTicketProcessor {
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Ticket Type not found for age"));
 
-            result.getTickets().merge(movieTicketPrice.getName(),
-                    QuantityCost.builder().quantity(1).totalCost(movieTicketPrice.getPrice()).build(),
-                    (oldV, newV) -> {
-                        newV.setQuantity(oldV.getQuantity() + 1);
-                        newV.setTotalCost(oldV.getTotalCost() + movieTicketPrice.getPrice());
-                        Optional.ofNullable(movieTicketPrice.getDiscount())
-                                .ifPresent(movieTicketDiscount -> {
-                                    if (newV.getQuantity() >= movieTicketDiscount.getDiscountFor()) {
-                                        double discount = newV.getTotalCost() * movieTicketDiscount.getDiscountAmount();
-                                        newV.setTotalCost(newV.getTotalCost() - discount);
-                                    }
-                                });
-                        return newV;
-                    });
+            QuantityCost quantityCost = result.getTickets().get(movieTicketPrice.getName());
+            if (Objects.isNull(quantityCost)) {
+                quantityCost = QuantityCost.builder()
+                        .quantity(1)
+                        .totalCost(movieTicketPrice.getPrice())
+                        .build();
+                result.getTickets().put(movieTicketPrice.getName(), quantityCost);
+            } else {
+                quantityCost.setQuantity(quantityCost.getQuantity() + 1);
+                quantityCost.setTotalCost(quantityCost.getTotalCost() + movieTicketPrice.getPrice());
+            }
+
+            MovieTicketDiscount movieTicketDiscount = movieTicketPrice.getDiscount();
+            if (movieTicketDiscount != null &&
+                    quantityCost.getQuantity() >= movieTicketDiscount.getDiscountFor()) {
+                double discount = quantityCost.getTotalCost() * movieTicketDiscount.getDiscountAmount();
+                quantityCost.setTotalCost(quantityCost.getTotalCost() - discount);
+            }
+
         }
         return result;
     }
 
-    static class MovieTicketDiscountConsumer implements Consumer<MovieTicketDiscount> {
-
-        private final QuantityCost quantityCost;
-
-        public MovieTicketDiscountConsumer(QuantityCost quantityCost) {
-            this.quantityCost = quantityCost;
-        }
-
-        @Override
-        public void accept(MovieTicketDiscount movieTicketDiscount) {
-            if (quantityCost.getQuantity() >= movieTicketDiscount.getDiscountFor()) {
-                double discount = quantityCost.getTotalCost() * movieTicketDiscount.getDiscountAmount();
-                quantityCost.setTotalCost(quantityCost.getTotalCost() - discount);
-            }
-        }
-    }
 }

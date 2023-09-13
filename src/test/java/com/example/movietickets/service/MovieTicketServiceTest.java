@@ -7,11 +7,12 @@ import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.example.movietickets.service.model.QuantityCost;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,18 +54,36 @@ class MovieTicketServiceTest {
         sut = new MovieTicketService(configuration);
     }
 
-    @Test
-    void process() {
+    @ParameterizedTest
+    @MethodSource
+    void testProcess(List<Integer> ageList, MovieTicketTypePriceDto expectedResult) {
         MovieTicketTypePriceDto actualResult = sut.process(MovieTicketInputDto.builder()
-                .customersAge(List.of(36, 3, 8, 9, 17))
+                .customersAge(ageList)
                 .build());
-        MovieTicketTypePriceDto expectedResult = new MovieTicketTypePriceDto();
-        Map<String, QuantityCost> tickets = new HashMap<>();
-        tickets.put("Adult", QuantityCost.builder().quantity(1).totalCost(25.0).build());
-        tickets.put("Children", QuantityCost.builder().quantity(3).totalCost(11.25).build());
-        tickets.put("Teen", QuantityCost.builder().quantity(1).totalCost(12.0).build());
-        expectedResult.setTickets(tickets);
-
         assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    public static Stream<Arguments> testProcess() {
+
+        MovieTicketTypePriceDto childrenAndSenior = new MovieTicketTypePriceDto();
+        childrenAndSenior.getTickets().put("Children",QuantityCost.builder().quantity(2).totalCost(10).build());
+        childrenAndSenior.getTickets().put("Senior",QuantityCost.builder().quantity(1).totalCost(17.50).build());
+
+        MovieTicketTypePriceDto threeChildren = new MovieTicketTypePriceDto();
+        threeChildren.getTickets().put("Adult", QuantityCost.builder().quantity(1).totalCost(25.0).build());
+        threeChildren.getTickets().put("Children", QuantityCost.builder().quantity(3).totalCost(11.25).build());
+        threeChildren.getTickets().put("Teen", QuantityCost.builder().quantity(1).totalCost(12.0).build());
+
+        MovieTicketTypePriceDto all = new MovieTicketTypePriceDto();
+        all.getTickets().put("Adult", QuantityCost.builder().quantity(1).totalCost(25.0).build());
+        all.getTickets().put("Children", QuantityCost.builder().quantity(1).totalCost(5).build());
+        all.getTickets().put("Teen", QuantityCost.builder().quantity(1).totalCost(12.0).build());
+        all.getTickets().put("Senior", QuantityCost.builder().quantity(1).totalCost(17.50).build());
+
+        return Stream.of(
+                Arguments.of(List.of(70, 5, 6), childrenAndSenior),
+                Arguments.of(List.of(36, 3, 8, 9, 17), threeChildren),
+                Arguments.of(List.of(36, 95, 15, 10), all)
+        );
     }
 }
