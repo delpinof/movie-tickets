@@ -2,11 +2,13 @@ package com.example.movietickets.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 @Builder
 public class MovieTicket implements Comparable<MovieTicket> {
-    private MovieTicketType ticketType;
+    private String ticketType;
     private int quantity;
     private double totalCost;
 
