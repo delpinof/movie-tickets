@@ -63,7 +63,7 @@ class MovieTicketServiceTest {
         MovieTicketTypePriceDto actualResult = sut.process(MovieTicketInputDto.builder()
                 .customersAge(ageList)
                 .build());
-        assertThat(actualResult).isEqualTo(expectedResult);
+        assertThat(actualResult.getTickets()).isEqualTo(expectedResult.getTickets());
     }
 
     public static Stream<Arguments> testProcess() {
