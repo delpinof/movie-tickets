@@ -38,8 +38,8 @@ public class MovieTicketResponseTest {
         movieTicketResponse1Dto = MovieTicketResponse.builder()
                 .transactionId(1)
                 .tickets(new TreeSet<>(Set.of(
-                        MovieTicket.builder().ticketType(MovieTicketType.Senior).quantity(1).totalCost(17.5).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(2).totalCost(10.0).build()
+                        MovieTicket.builder().ticketType("Senior").quantity(1).totalCost(17.5).build(),
+                        MovieTicket.builder().ticketType("Children").quantity(2).totalCost(10.0).build()
                 )))
                 .totalCost(27.50)
                 .build();
@@ -50,9 +50,9 @@ public class MovieTicketResponseTest {
         movieTicketResponse2Dto = MovieTicketResponse.builder()
                 .transactionId(1)
                 .tickets(new TreeSet<>(Set.of(
-                        MovieTicket.builder().ticketType(MovieTicketType.Teen).quantity(1).totalCost(12.0).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(3).totalCost(11.25).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Adult).quantity(1).totalCost(25.0).build()
+                        MovieTicket.builder().ticketType("Teen").quantity(1).totalCost(12.0).build(),
+                        MovieTicket.builder().ticketType("Children").quantity(3).totalCost(11.25).build(),
+                        MovieTicket.builder().ticketType("Adult").quantity(1).totalCost(25.0).build()
                 )))
                 .totalCost(48.25)
                 .build();
@@ -63,10 +63,10 @@ public class MovieTicketResponseTest {
         movieTicketResponse3Dto = MovieTicketResponse.builder()
                 .transactionId(1)
                 .tickets(new TreeSet<>(Set.of(
-                        MovieTicket.builder().ticketType(MovieTicketType.Senior).quantity(1).totalCost(17.5).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Teen).quantity(1).totalCost(12.0).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Children).quantity(1).totalCost(5.0).build(),
-                        MovieTicket.builder().ticketType(MovieTicketType.Adult).quantity(1).totalCost(25.0).build()
+                        MovieTicket.builder().ticketType("Senior").quantity(1).totalCost(17.5).build(),
+                        MovieTicket.builder().ticketType("Teen").quantity(1).totalCost(12.0).build(),
+                        MovieTicket.builder().ticketType("Children").quantity(1).totalCost(5.0).build(),
+                        MovieTicket.builder().ticketType("Adult").quantity(1).totalCost(25.0).build()
                 )))
                 .totalCost(59.50)
                 .build();

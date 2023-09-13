@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MovieTicket implements Comparable<MovieTicket> {
-    private MovieTicketType ticketType;
+    private String ticketType;
     private int quantity;
     private double totalCost;
 
