@@ -10,9 +10,9 @@ import java.util.TreeSet;
 import java.util.function.Function;
 
 @Component
-public class MovieTicketUpstreamAdapter implements Function<MovieTicketTypePriceDto, MovieTicketResponse.MovieTicketResponseBuilder> {
+public class MovieTicketUpstreamAdapter implements Function<MovieTicketTypePriceDto, MovieTicketResponse> {
     @Override
-    public MovieTicketResponse.MovieTicketResponseBuilder apply(MovieTicketTypePriceDto movieTicketTypePriceDto) {
+    public MovieTicketResponse apply(MovieTicketTypePriceDto movieTicketTypePriceDto) {
         TreeSet<MovieTicket> tickets = new TreeSet<>();
         double totalCost = 0.0;
         for (String ticketType : movieTicketTypePriceDto.getTickets().keySet()) {
@@ -26,6 +26,7 @@ public class MovieTicketUpstreamAdapter implements Function<MovieTicketTypePrice
         }
         return MovieTicketResponse.builder()
                 .tickets(tickets)
-                .totalCost(totalCost);
+                .totalCost(totalCost)
+                .build();
     }
 }

@@ -7,6 +7,6 @@ import java.util.Map;
 
 @Data
 public class MovieTicketTypePriceDto {
-    private Map<String, QuantityCost> tickets = new HashMap<>();
+    private final Map<String, QuantityCost> tickets = new HashMap<>();
 
 }

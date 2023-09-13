@@ -8,5 +8,5 @@ import java.util.List;
 @Builder
 @Getter
 public class MovieTicketInputDto {
-    private List<Integer> customersAge;
+    private final List<Integer> customersAge;
 }

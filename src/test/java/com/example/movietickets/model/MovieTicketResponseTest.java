@@ -48,7 +48,7 @@ public class MovieTicketResponseTest {
                 .getResourceAsStream("/json/MovieTicketResponseExample2.json")
                 .readAllBytes());
         movieTicketResponse2Dto = MovieTicketResponse.builder()
-                .transactionId(1)
+                .transactionId(2)
                 .tickets(new TreeSet<>(Set.of(
                         MovieTicket.builder().ticketType("Teen").quantity(1).totalCost(12.0).build(),
                         MovieTicket.builder().ticketType("Children").quantity(3).totalCost(11.25).build(),
@@ -61,7 +61,7 @@ public class MovieTicketResponseTest {
                 .getResourceAsStream("/json/MovieTicketResponseExample3.json")
                 .readAllBytes());
         movieTicketResponse3Dto = MovieTicketResponse.builder()
-                .transactionId(1)
+                .transactionId(3)
                 .tickets(new TreeSet<>(Set.of(
                         MovieTicket.builder().ticketType("Senior").quantity(1).totalCost(17.5).build(),
                         MovieTicket.builder().ticketType("Teen").quantity(1).totalCost(12.0).build(),

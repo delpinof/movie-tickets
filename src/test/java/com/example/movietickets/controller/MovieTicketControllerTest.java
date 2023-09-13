@@ -5,6 +5,7 @@ import com.example.movietickets.model.MovieCustomer;
 import com.example.movietickets.model.MovieTicketRequest;
 import com.example.movietickets.model.MovieTicketResponse;
 import com.example.movietickets.service.MovieTicketProcessor;
+import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +35,11 @@ import static org.mockito.Mockito.when;
 public class MovieTicketControllerTest {
     @MockBean
     private MovieTicketProcessor movieTicketProcessor;
+    @MockBean
+    private Function<MovieTicketRequest, MovieTicketInputDto> downstreamAdapter;
+
+    @MockBean
+    private Function<MovieTicketTypePriceDto, MovieTicketResponse> upstreamAdapter;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -53,7 +60,9 @@ public class MovieTicketControllerTest {
 
         MovieTicketResponse movieTicketServiceResponse = objectMapper.readValue(movieTicketResponse, MovieTicketResponse.class);
 
+        when(downstreamAdapter.apply(any())).thenReturn(MovieTicketInputDto.builder().build());
         when(movieTicketProcessor.process(any())).thenReturn(new MovieTicketTypePriceDto());
+        when(upstreamAdapter.apply(any())).thenReturn(movieTicketServiceResponse);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(MovieTicketApi.MOVIE_TICKET_TRANSACTION)
                 .content(movieTicketRequest)
@@ -75,6 +84,9 @@ public class MovieTicketControllerTest {
     @MethodSource
     public void testResponseStatus(MovieTicketRequest requestDto, ResultMatcher resultMatcherExpected) throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
+        when(downstreamAdapter.apply(any())).thenReturn(MovieTicketInputDto.builder().build());
+        when(movieTicketProcessor.process(any())).thenReturn(new MovieTicketTypePriceDto());
+        when(upstreamAdapter.apply(any())).thenReturn(MovieTicketResponse.builder().build());
         mockMvc.perform(MockMvcRequestBuilders.post(MovieTicketApi.MOVIE_TICKET_TRANSACTION)
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))

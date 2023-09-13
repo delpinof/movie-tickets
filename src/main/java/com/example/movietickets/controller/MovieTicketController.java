@@ -29,18 +29,18 @@ public class MovieTicketController implements MovieTicketApi {
     private final Function<MovieTicketRequest, MovieTicketInputDto> downstreamAdapter;
 
     @Autowired
-    private final Function<MovieTicketTypePriceDto, MovieTicketResponse.MovieTicketResponseBuilder> upstreamAdapter;
+    private final Function<MovieTicketTypePriceDto, MovieTicketResponse> upstreamAdapter;
 
     @Override
     @PostMapping(MOVIE_TICKET_TRANSACTION)
     public MovieTicketResponse ticketTransaction(@Valid @RequestBody MovieTicketRequest request) {
         log.debug("{}", request);
-        return Optional.of(request)
+        MovieTicketResponse response = Optional.of(request)
                 .map(downstreamAdapter)
                 .map(movieTicketProcessor::process)
                 .map(upstreamAdapter)
-                .orElseThrow()
-                .transactionId(request.getTransactionId())
-                .build();
+                .orElseThrow();
+        response.setTransactionId(request.getTransactionId());
+        return response;
     }
 }
