@@ -23,7 +23,7 @@ public class MovieTicketController implements MovieTicketApi {
     @Override
     @PostMapping(MOVIE_TICKET_TRANSACTION)
     public MovieTicketResponse ticketTransaction(@Valid @RequestBody MovieTicketRequest request) {
-        log.info("{}", request);
+        log.debug("{}", request);
         return movieTicketProcessor.process(request);
     }
 }
