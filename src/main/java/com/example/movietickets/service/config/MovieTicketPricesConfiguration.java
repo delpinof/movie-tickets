@@ -15,5 +15,5 @@ import java.util.TreeSet;
 @Setter
 public class MovieTicketPricesConfiguration {
 
-    private Set<MovieTicketPrice> prices = new TreeSet<>(Collections.reverseOrder());
+    private Set<MovieTicketType> prices = new TreeSet<>(Collections.reverseOrder());
 }

@@ -1,7 +1,7 @@
 package com.example.movietickets.service;
 
 import com.example.movietickets.service.config.MovieTicketDiscount;
-import com.example.movietickets.service.config.MovieTicketPrice;
+import com.example.movietickets.service.config.MovieTicketType;
 import com.example.movietickets.service.config.MovieTicketPricesConfiguration;
 import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
@@ -23,12 +23,12 @@ class MovieTicketServiceTest {
     @BeforeEach
     public void setUp() {
         MovieTicketPricesConfiguration configuration = new MovieTicketPricesConfiguration();
-        configuration.getPrices().add(MovieTicketPrice.builder()
+        configuration.getPrices().add(MovieTicketType.builder()
                 .name("Adult")
                 .age(18)
                 .price(25.0)
                 .build());
-        configuration.getPrices().add(MovieTicketPrice.builder()
+        configuration.getPrices().add(MovieTicketType.builder()
                 .name("Senior")
                 .age(65)
                 .price(25.0)
@@ -37,12 +37,12 @@ class MovieTicketServiceTest {
                         .discountAmount(.30)
                         .build())
                 .build());
-        configuration.getPrices().add(MovieTicketPrice.builder()
+        configuration.getPrices().add(MovieTicketType.builder()
                 .name("Teen")
                 .age(11)
                 .price(12.0)
                 .build());
-        configuration.getPrices().add(MovieTicketPrice.builder()
+        configuration.getPrices().add(MovieTicketType.builder()
                 .name("Children")
                 .age(0)
                 .price(5.0)

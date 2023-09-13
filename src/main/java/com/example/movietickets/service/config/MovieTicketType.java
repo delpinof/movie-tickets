@@ -5,14 +5,14 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MovieTicketPrice implements Comparable<MovieTicketPrice> {
+public class MovieTicketType implements Comparable<MovieTicketType> {
     private String name;
     private double price;
     private Integer age;
     private MovieTicketDiscount discount;
 
     @Override
-    public int compareTo(MovieTicketPrice anotherPrice) {
+    public int compareTo(MovieTicketType anotherPrice) {
         return this.getAge().compareTo(anotherPrice.getAge());
     }
 }
