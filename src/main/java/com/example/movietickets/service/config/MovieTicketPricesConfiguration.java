@@ -13,5 +13,5 @@ import java.util.TreeSet;
 @Builder
 public class MovieTicketPricesConfiguration {
 
-    private final TreeSet<MovieTicketType> prices;
+    private final TreeSet<MovieTicketType> prices; //Forcing TreeSet implementation for natural order and avoid duplicates.
 }
