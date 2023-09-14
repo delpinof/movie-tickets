@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
@@ -28,7 +29,9 @@ class MovieTicketUpstreamAdapterTest {
     }
 
     public static Stream<Arguments> testUpstreamAdapterDataSource() {
-        MovieTicketTypePriceDto dto1 = new MovieTicketTypePriceDto();
+        MovieTicketTypePriceDto dto1 = MovieTicketTypePriceDto.builder()
+                .tickets(new HashMap<>())
+                .build();
         dto1.getTickets().put("Children", new QuantityCost(2, 10.0));
         dto1.getTickets().put("Senior", new QuantityCost(1, 17.50));
         MovieTicketResponse response1 = MovieTicketResponse.builder()
@@ -40,7 +43,9 @@ class MovieTicketUpstreamAdapterTest {
                 .totalCost(27.50)
                 .build();
 
-        MovieTicketTypePriceDto dto2 = new MovieTicketTypePriceDto();
+        MovieTicketTypePriceDto dto2 = MovieTicketTypePriceDto.builder()
+                .tickets(new HashMap<>())
+                .build();
         dto2.getTickets().put("Children", new QuantityCost(3, 11.25));
         dto2.getTickets().put("Adult", new QuantityCost(1, 25.0));
         dto2.getTickets().put("Teen", new QuantityCost(1, 12.0));
@@ -54,7 +59,9 @@ class MovieTicketUpstreamAdapterTest {
                 .totalCost(48.25)
                 .build();
 
-        MovieTicketTypePriceDto dto3 = new MovieTicketTypePriceDto();
+        MovieTicketTypePriceDto dto3 = MovieTicketTypePriceDto.builder()
+                .tickets(new HashMap<>())
+                .build();
         dto3.getTickets().put("Children", new QuantityCost(1, 5.0));
         dto3.getTickets().put("Adult", new QuantityCost(1, 25.0));
         dto3.getTickets().put("Teen", new QuantityCost(1, 12.0));

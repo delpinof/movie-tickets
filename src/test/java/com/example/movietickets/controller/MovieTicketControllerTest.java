@@ -58,7 +58,7 @@ public class MovieTicketControllerTest {
         MovieTicketResponse movieTicketServiceResponse = objectMapper.readValue(movieTicketResponse, MovieTicketResponse.class);
 
         when(downstreamAdapter.apply(any())).thenReturn(MovieTicketInputDto.builder().build());
-        when(movieTicketProcessor.process(any())).thenReturn(new MovieTicketTypePriceDto());
+        when(movieTicketProcessor.process(any())).thenReturn(MovieTicketTypePriceDto.builder().build());
         when(upstreamAdapter.apply(any())).thenReturn(movieTicketServiceResponse);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(MovieTicketApi.MOVIE_TICKET_TRANSACTION)
@@ -82,7 +82,7 @@ public class MovieTicketControllerTest {
     public void testResponseStatus(MovieTicketRequest requestDto, ResultMatcher resultMatcherExpected) throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         when(downstreamAdapter.apply(any())).thenReturn(MovieTicketInputDto.builder().build());
-        when(movieTicketProcessor.process(any())).thenReturn(new MovieTicketTypePriceDto());
+        when(movieTicketProcessor.process(any())).thenReturn(MovieTicketTypePriceDto.builder().build());
         when(upstreamAdapter.apply(any())).thenReturn(MovieTicketResponse.builder().build());
         mockMvc.perform(MockMvcRequestBuilders.post(MovieTicketApi.MOVIE_TICKET_TRANSACTION)
                         .content(jsonRequest)

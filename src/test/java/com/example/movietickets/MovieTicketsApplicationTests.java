@@ -2,7 +2,7 @@ package com.example.movietickets;
 
 import com.example.movietickets.controller.MovieTicketController;
 import com.example.movietickets.service.config.MovieTicketPricesConfiguration;
-import com.example.movietickets.service.config.MovieTicketType;
+import com.example.movietickets.service.config.MovieTicketTypeConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +33,7 @@ class MovieTicketsApplicationTests {
     @Test
     void testPricesConfiguration() {
         List<Integer> ages = pricesConfiguration.getPrices().stream()
-                .map(MovieTicketType::getAge)
+                .map(MovieTicketTypeConfig::getAge)
                 .toList();
 
         for (int i = 1; i < ages.size(); i++) {
