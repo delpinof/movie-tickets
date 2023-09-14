@@ -1,9 +1,11 @@
 package com.example.movietickets.service.config;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
+@EqualsAndHashCode
 @Builder
 public class MovieTicketType implements Comparable<MovieTicketType> {
     private String name;
