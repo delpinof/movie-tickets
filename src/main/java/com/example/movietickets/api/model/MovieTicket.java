@@ -9,7 +9,7 @@ import lombok.ToString;
 @Builder
 public class MovieTicket implements Comparable<MovieTicket> {
     private String ticketType;
-    private int quantity;
+    private long quantity;
     private double totalCost;
 
     public int compareTo(MovieTicket movieTicket) {

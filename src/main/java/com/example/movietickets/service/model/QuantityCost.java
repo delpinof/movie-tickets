@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class QuantityCost {
-    private int quantity;
+    private long quantity;
     private double totalCost;
 }

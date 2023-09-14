@@ -11,8 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
@@ -26,22 +27,18 @@ public class MovieTicketService implements MovieTicketProcessor {
 
     @Override
     public MovieTicketTypePriceDto process(MovieTicketInputDto inputDto) {
-        Map<MovieTicketType, Integer> ticketTypeCountMap = new HashMap<>();
-        for (int age : inputDto.getCustomersAge()) {
-            MovieTicketType movieTicketType = getMovieTicketType(age);
-            ticketTypeCountMap.merge(movieTicketType, 1, Integer::sum);
-        }
+        Map<MovieTicketType, Long> ticketTypeCountMap = inputDto.getCustomersAge()
+                .stream()
+                .map(this::getMovieTicketType)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         MovieTicketTypePriceDto result = new MovieTicketTypePriceDto();
         for (MovieTicketType movieTicketType : ticketTypeCountMap.keySet()) {
-            //calculate totalCost
-            int quantity = ticketTypeCountMap.get(movieTicketType);
+            long quantity = ticketTypeCountMap.get(movieTicketType);
             double totalCost = movieTicketType.getPrice() * quantity;
-            //apply discount if applicable
             MovieTicketDiscount movieTicketDiscount = movieTicketType.getDiscount();
             if (nonNull(movieTicketDiscount) && quantity >= movieTicketDiscount.getDiscountFor()) {
                 totalCost -= totalCost * movieTicketDiscount.getDiscountAmount();
             }
-            //add ticket type to result
             result.getTickets().put(movieTicketType.getName(), new QuantityCost(quantity, totalCost));
         }
         return result;
