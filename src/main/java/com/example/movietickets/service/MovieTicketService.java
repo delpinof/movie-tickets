@@ -35,6 +35,7 @@ public class MovieTicketService implements MovieTicketProcessor {
         for (MovieTicketType movieTicketType : ticketTypeCountMap.keySet()) {
             long quantity = ticketTypeCountMap.get(movieTicketType);
             double totalCost = movieTicketType.getPrice() * quantity;
+            //apply discount if applicable
             MovieTicketDiscount movieTicketDiscount = movieTicketType.getDiscount();
             if (nonNull(movieTicketDiscount) && quantity >= movieTicketDiscount.getDiscountFor()) {
                 totalCost -= totalCost * movieTicketDiscount.getDiscountAmount();
