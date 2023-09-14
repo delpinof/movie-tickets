@@ -11,7 +11,7 @@ public class MovieTicketsConfiguration {
     public OpenAPI movieTicketsOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("movie-tickets API")
-                        .description("Movie tickets processor by ticket type")
+                        .description("A movie ticket price calculator by age and ticket type.")
                         .version("1.0"));
     }
 }

@@ -1,6 +1,6 @@
 # movie-tickets api
 
-Foobar is a Python library for dealing with word pluralization.
+A movie ticket price calculator by age and ticket type.
 
 ## Build
 
