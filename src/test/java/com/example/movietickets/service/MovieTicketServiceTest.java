@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Stream;
@@ -54,7 +55,7 @@ class MovieTicketServiceTest {
                         .discountFor(3)
                         .build())
                 .build());
-        sut = new MovieTicketService(configuration);
+        sut = new MovieTicketService(new MovieTicketAgeTranslator(configuration), new MovieTicketTypeTranslator());
     }
 
     @ParameterizedTest
@@ -68,16 +69,22 @@ class MovieTicketServiceTest {
 
     public static Stream<Arguments> testProcess() {
 
-        MovieTicketTypePriceDto childrenAndSenior = new MovieTicketTypePriceDto();
+        MovieTicketTypePriceDto childrenAndSenior = MovieTicketTypePriceDto.builder()
+                .tickets(new HashMap<>())
+                .build();
         childrenAndSenior.getTickets().put("Children", new QuantityCost(2, 10));
         childrenAndSenior.getTickets().put("Senior", new QuantityCost(1, 17.50));
 
-        MovieTicketTypePriceDto threeChildren = new MovieTicketTypePriceDto();
+        MovieTicketTypePriceDto threeChildren = MovieTicketTypePriceDto.builder()
+                .tickets(new HashMap<>())
+                .build();
         threeChildren.getTickets().put("Adult", new QuantityCost(1, 25.0));
         threeChildren.getTickets().put("Children", new QuantityCost(3, 11.25));
         threeChildren.getTickets().put("Teen", new QuantityCost(1, 12.0));
 
-        MovieTicketTypePriceDto all = new MovieTicketTypePriceDto();
+        MovieTicketTypePriceDto all = MovieTicketTypePriceDto.builder()
+                .tickets(new HashMap<>())
+                .build();
         all.getTickets().put("Adult", new QuantityCost(1, 25.0));
         all.getTickets().put("Children", new QuantityCost(1, 5));
         all.getTickets().put("Teen", new QuantityCost(1, 12.0));
