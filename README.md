@@ -16,6 +16,4 @@ A movie ticket price calculator by age and ticket type.
 
 ## Usage
 
-```
-http://localhost:8080/swagger-ui/index.html
-```
+- [OpenAPI (SWAGGER)](http://localhost:8080/swagger-ui/index.html)
