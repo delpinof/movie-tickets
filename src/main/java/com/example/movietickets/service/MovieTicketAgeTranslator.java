@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
+/**
+ * Extract the correct Ticket Type-Price configuration based on the age.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
