@@ -1,3 +1,4 @@
+#add more ticket types as needed
 movie-tickets:
   prices:
     - name: Adult
