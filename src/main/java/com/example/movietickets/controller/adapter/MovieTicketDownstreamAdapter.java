@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Adapter to decouple the controller and service layer input/output.
+ * So that the JSON POJOs and the DTO can change independently.
+ */
 @Component
 public class MovieTicketDownstreamAdapter implements Function<MovieTicketRequest, MovieTicketInputDto> {
     @Override
