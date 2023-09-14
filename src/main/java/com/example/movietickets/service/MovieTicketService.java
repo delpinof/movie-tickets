@@ -7,12 +7,16 @@ import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.example.movietickets.service.model.QuantityCost;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
+import static java.util.Objects.nonNull;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MovieTicketService implements MovieTicketProcessor {
@@ -22,11 +26,23 @@ public class MovieTicketService implements MovieTicketProcessor {
 
     @Override
     public MovieTicketTypePriceDto process(MovieTicketInputDto inputDto) {
-        MovieTicketTypePriceDto result = new MovieTicketTypePriceDto();
+        Map<MovieTicketType, Integer> ticketTypeCountMap = new HashMap<>();
         for (int age : inputDto.getCustomersAge()) {
             MovieTicketType movieTicketType = getMovieTicketType(age);
-            QuantityCost quantityCost = addTicketCost(result.getTickets(), movieTicketType);
-            applyDiscount(movieTicketType, quantityCost);
+            ticketTypeCountMap.merge(movieTicketType, 1, Integer::sum);
+        }
+        MovieTicketTypePriceDto result = new MovieTicketTypePriceDto();
+        for (MovieTicketType movieTicketType : ticketTypeCountMap.keySet()) {
+            //calculate totalCost
+            int quantity = ticketTypeCountMap.get(movieTicketType);
+            double totalCost = movieTicketType.getPrice() * quantity;
+            //apply discount if applicable
+            MovieTicketDiscount movieTicketDiscount = movieTicketType.getDiscount();
+            if (nonNull(movieTicketDiscount) && quantity >= movieTicketDiscount.getDiscountFor()) {
+                totalCost -= totalCost * movieTicketDiscount.getDiscountAmount();
+            }
+            //add ticket type to result
+            result.getTickets().put(movieTicketType.getName(), new QuantityCost(quantity, totalCost));
         }
         return result;
     }
@@ -36,28 +52,10 @@ public class MovieTicketService implements MovieTicketProcessor {
                 .stream()
                 .filter(e -> age >= e.getAge())
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Ticket Type not found for age"));
-    }
-
-    private QuantityCost addTicketCost(Map<String, QuantityCost> tickets, MovieTicketType movieTicketType) {
-        QuantityCost quantityCost = tickets.get(movieTicketType.getName());
-        if (Objects.isNull(quantityCost)) {
-            quantityCost = new QuantityCost(1, movieTicketType.getPrice());
-            tickets.put(movieTicketType.getName(), quantityCost);
-        } else {
-            quantityCost.setQuantity(quantityCost.getQuantity() + 1);
-            quantityCost.setTotalCost(quantityCost.getTotalCost() + movieTicketType.getPrice());
-        }
-        return quantityCost;
-    }
-
-    private void applyDiscount(MovieTicketType movieTicketType, QuantityCost quantityCost) {
-        MovieTicketDiscount movieTicketDiscount = movieTicketType.getDiscount();
-        if (movieTicketDiscount != null &&
-                quantityCost.getQuantity() >= movieTicketDiscount.getDiscountFor()) {
-            double discount = quantityCost.getTotalCost() * movieTicketDiscount.getDiscountAmount();
-            quantityCost.setTotalCost(quantityCost.getTotalCost() - discount);
-        }
+                .orElseThrow(() -> {
+                    log.error("Ticket type not found for age: {}", age);
+                    return new RuntimeException("Ticket Type not found");
+                });
     }
 
 }
