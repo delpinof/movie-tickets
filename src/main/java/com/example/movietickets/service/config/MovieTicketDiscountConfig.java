@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MovieTicketDiscount {
+public class MovieTicketDiscountConfig {
     private int discountFor;
     private double discountAmount;
 }

@@ -1,6 +1,6 @@
 package com.example.movietickets.service;
 
-import com.example.movietickets.service.config.MovieTicketType;
+import com.example.movietickets.service.config.MovieTicketTypeConfig;
 import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.example.movietickets.service.model.QuantityCost;
@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 public class MovieTicketService implements MovieTicketProcessor {
 
     @Autowired
-    private final Function<Integer, MovieTicketType> movieTicketAgeTranslator;
+    private final Function<Integer, MovieTicketTypeConfig> movieTicketAgeTranslator;
 
     @Autowired
-    private final Function<Map.Entry<MovieTicketType, Long>, Map.Entry<String, QuantityCost>> movieTicketTypeTranslator;
+    private final Function<Map.Entry<MovieTicketTypeConfig, Long>, Map.Entry<String, QuantityCost>> movieTicketTypeTranslator;
 
     @Override
     public MovieTicketTypePriceDto process(MovieTicketInputDto inputDto) {
-        Map<MovieTicketType, Long> ticketTypeCountMap = inputDto.getCustomersAge()
+        Map<MovieTicketTypeConfig, Long> ticketTypeCountMap = inputDto.getCustomersAge()
                 .stream()
                 .map(movieTicketAgeTranslator)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));

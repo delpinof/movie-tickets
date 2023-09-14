@@ -7,14 +7,14 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 @Builder
-public class MovieTicketType implements Comparable<MovieTicketType> {
+public class MovieTicketTypeConfig implements Comparable<MovieTicketTypeConfig> {
     private String name;
     private double price;
     private Integer age;
-    private MovieTicketDiscount discount;
+    private MovieTicketDiscountConfig discount;
 
     @Override
-    public int compareTo(MovieTicketType anotherPrice) {
+    public int compareTo(MovieTicketTypeConfig anotherPrice) {
         return anotherPrice.getAge().compareTo(this.getAge());
     }
 }

@@ -1,7 +1,7 @@
 package com.example.movietickets.service;
 
-import com.example.movietickets.service.config.MovieTicketDiscount;
-import com.example.movietickets.service.config.MovieTicketType;
+import com.example.movietickets.service.config.MovieTicketDiscountConfig;
+import com.example.movietickets.service.config.MovieTicketTypeConfig;
 import com.example.movietickets.service.model.QuantityCost;
 import org.springframework.stereotype.Component;
 
@@ -17,17 +17,17 @@ import static java.util.Objects.nonNull;
  * then return a new map entry of the String ticket type as key and the quantity-cost as value.
  */
 @Component
-public class MovieTicketTypeTranslator implements Function<Map.Entry<MovieTicketType, Long>, Map.Entry<String, QuantityCost>> {
+public class MovieTicketTypeTranslator implements Function<Map.Entry<MovieTicketTypeConfig, Long>, Map.Entry<String, QuantityCost>> {
     @Override
-    public Map.Entry<String, QuantityCost> apply(Map.Entry<MovieTicketType, Long> movieTicketTypeQuantityEntry) {
-        MovieTicketType movieTicketType = movieTicketTypeQuantityEntry.getKey();
+    public Map.Entry<String, QuantityCost> apply(Map.Entry<MovieTicketTypeConfig, Long> movieTicketTypeQuantityEntry) {
+        MovieTicketTypeConfig movieTicketTypeConfig = movieTicketTypeQuantityEntry.getKey();
         long quantity = movieTicketTypeQuantityEntry.getValue();
-        double totalCost = movieTicketType.getPrice() * quantity;
+        double totalCost = movieTicketTypeConfig.getPrice() * quantity;
         //apply discount if applicable
-        MovieTicketDiscount movieTicketDiscount = movieTicketType.getDiscount();
-        if (nonNull(movieTicketDiscount) && quantity >= movieTicketDiscount.getDiscountFor()) {
-            totalCost -= totalCost * movieTicketDiscount.getDiscountAmount();
+        MovieTicketDiscountConfig movieTicketDiscountConfig = movieTicketTypeConfig.getDiscount();
+        if (nonNull(movieTicketDiscountConfig) && quantity >= movieTicketDiscountConfig.getDiscountFor()) {
+            totalCost -= totalCost * movieTicketDiscountConfig.getDiscountAmount();
         }
-        return new AbstractMap.SimpleEntry<>(movieTicketType.getName(), new QuantityCost(quantity, totalCost));
+        return new AbstractMap.SimpleEntry<>(movieTicketTypeConfig.getName(), new QuantityCost(quantity, totalCost));
     }
 }

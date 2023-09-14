@@ -1,8 +1,8 @@
 package com.example.movietickets.service;
 
-import com.example.movietickets.service.config.MovieTicketDiscount;
+import com.example.movietickets.service.config.MovieTicketDiscountConfig;
 import com.example.movietickets.service.config.MovieTicketPricesConfiguration;
-import com.example.movietickets.service.config.MovieTicketType;
+import com.example.movietickets.service.config.MovieTicketTypeConfig;
 import com.example.movietickets.service.model.MovieTicketInputDto;
 import com.example.movietickets.service.model.MovieTicketTypePriceDto;
 import com.example.movietickets.service.model.QuantityCost;
@@ -27,30 +27,30 @@ class MovieTicketServiceTest {
         MovieTicketPricesConfiguration configuration = MovieTicketPricesConfiguration.builder()
                 .prices(new TreeSet<>())
                 .build();
-        configuration.getPrices().add(MovieTicketType.builder()
+        configuration.getPrices().add(MovieTicketTypeConfig.builder()
                 .name("Adult")
                 .age(18)
                 .price(25.0)
                 .build());
-        configuration.getPrices().add(MovieTicketType.builder()
+        configuration.getPrices().add(MovieTicketTypeConfig.builder()
                 .name("Senior")
                 .age(65)
                 .price(25.0)
-                .discount(MovieTicketDiscount.builder()
+                .discount(MovieTicketDiscountConfig.builder()
                         .discountFor(1)
                         .discountAmount(.30)
                         .build())
                 .build());
-        configuration.getPrices().add(MovieTicketType.builder()
+        configuration.getPrices().add(MovieTicketTypeConfig.builder()
                 .name("Teen")
                 .age(11)
                 .price(12.0)
                 .build());
-        configuration.getPrices().add(MovieTicketType.builder()
+        configuration.getPrices().add(MovieTicketTypeConfig.builder()
                 .name("Children")
                 .age(0)
                 .price(5.0)
-                .discount(MovieTicketDiscount.builder()
+                .discount(MovieTicketDiscountConfig.builder()
                         .discountAmount(.25)
                         .discountFor(3)
                         .build())

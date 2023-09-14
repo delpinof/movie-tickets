@@ -1,7 +1,7 @@
 package com.example.movietickets.service;
 
 import com.example.movietickets.service.config.MovieTicketPricesConfiguration;
-import com.example.movietickets.service.config.MovieTicketType;
+import com.example.movietickets.service.config.MovieTicketTypeConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,13 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class MovieTicketAgeTranslator implements Function<Integer, MovieTicketType> {
+public class MovieTicketAgeTranslator implements Function<Integer, MovieTicketTypeConfig> {
 
     @Autowired
     private final MovieTicketPricesConfiguration configuration;
 
     @Override
-    public MovieTicketType apply(Integer age) {
+    public MovieTicketTypeConfig apply(Integer age) {
         return configuration.getPrices()
                 .stream()
                 .filter(e -> age >= e.getAge())
